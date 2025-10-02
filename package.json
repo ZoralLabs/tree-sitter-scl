@@ -1,0 +1,66 @@
+{
+  "name": "tree-sitter-scl",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for SCL (Smart Contracts Language)",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "keywords": [
+    "parser",
+    "tree-sitter",
+    "scl",
+    "smart-contracts",
+    "tengo",
+    "parsing"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "node-addon-api": "^7.1.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.22.2",
+    "prebuildify": "^6.0.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "tree-sitter build",
+    "build-wasm": "tree-sitter build --wasm",
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "test-watch": "tree-sitter test --debug",
+    "parse": "tree-sitter parse",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.scl",
+      "file-types": [
+        "scl"
+      ],
+      "injection-regex": "^scl$"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/tree-sitter-scl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/tree-sitter-scl/issues"
+  },
+  "homepage": "https://github.com/yourusername/tree-sitter-scl#readme",
+  "files": [
+    "grammar.js",
+    "src",
+    "bindings",
+    "queries"
+  ]
+}

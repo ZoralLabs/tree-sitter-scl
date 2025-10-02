@@ -1,0 +1,42 @@
+fin := import("fin")
+times := import("times")
+
+if $loan_amount <= 0 {
+    reject("on activation: Loan amount is negative or zero: " + $loan_amount + ", " + $effective_time)
+}
+
+if $loan_period <= 0 {
+    reject("on activation: Loan period is negative or zero: " + $loan_period + ", " + $effective_time)
+}
+
+if $open_date == undefined || $open_date.is_zero {
+    set_parameter("open_date", $effective_time)
+}
+
+// calculate interest rate
+rate := fin.get_dated_rate($fixed_base_interest_rate, $effective_time, $max_interest_rate)
+set_parameter("loan_interest_rate", rate)
+
+// calculate EMI amount
+base_rate := (rate / 100) / 12
+emi_amount := fin.payment(base_rate, $loan_period, $loan_amount, 0, "pay_end")
+emi_amount = fin.round_bank(emi_amount.abs, 2)
+set_parameter("emi_amount", emi_amount)
+
+// schedule first booking and demand events
+installment_demand_time := times.next_scheduled_time($effective_time, $term_type, $installment_demand_date, $installment_demand_day)
+booking_time := times.next_scheduled_time($effective_time, $interest_book_frequency, $interest_book_date, $interest_book_day)
+booking_time = min(booking_time, installment_demand_time)
+schedule_event("booking", booking_time)
+schedule_event("demand_generation", installment_demand_time)
+schedule_event("demand_satisfaction", installment_demand_time)
+
+// post loan disbursement
+new_transaction($disbursement_transaction_type, "Loan disbursement")
+new_posting($primary_balance_id, $loan_disbursement_balance_id, $loan_amount, $ledger, $disbursement_posting_type)
+
+// post service charge
+rate = fin.get_tiered_rate($loan_processing_fee, $loan_amount)
+fee_amount := $loan_amount * rate / 100
+new_transaction($service_charge_transaction_type, "Loan disbursement fees")
+new_posting($loan_disbursement_balance_id, $service_charge_collection_balance_id, fee_amount, $ledger, $service_charge_posting_type)

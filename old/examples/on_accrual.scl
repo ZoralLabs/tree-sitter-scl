@@ -1,0 +1,51 @@
+fin := import("fin")
+
+days_in_year := fin.days_in_year($effective_time, $interest_day_basis)
+interest_amount := 0
+penalty_interest_amount := 0
+
+eod_primary := $primary_balance.amount
+if eod_primary > 0 {
+    reject("on accrual: Unexpected positive amount on primary balance: " + eod_primary + ", " + $effective_time)
+}
+eod_primary = eod_primary.abs
+
+if eod_primary > 0 {
+    interest_rate := ($loan_interest_rate + $customer_preferential_rate) / 100
+    interest_amount = eod_primary * interest_rate / days_in_year
+}
+
+eod_arrears_principle := $arrears_principle_balance.amount
+if eod_arrears_principle > 0 {
+    reject("on accrual: Unexpected positive amount on arrears principle balance: " + eod_arrears_principle + ", " + $effective_time)
+}
+eod_arrears_principle = eod_arrears_principle.abs
+
+if eod_arrears_principle > 0 {
+    interest_rate := ($loan_interest_rate + $customer_preferential_rate + $penalty_interest_rate) / 100
+    penalty_interest_amount = eod_arrears_principle * interest_rate / days_in_year
+}
+
+if interest_amount > 0 || penalty_interest_amount > 0 {
+    new_transaction($interest_transaction_type, "Interest accrual of " + $effective_time.date_str)
+}
+
+if interest_amount > 0 {
+    new_posting($debit_interest_accrual_balance_id, $internal_contra_balance_id, interest_amount, $ledger, $interest_posting_type)
+}
+
+if penalty_interest_amount > 0 {
+    new_posting($penal_interest_accrual_balance_id, $internal_contra_balance_id, penalty_interest_amount, $ledger, $penalty_interest_posting_type)
+}
+
+// closure checks
+if eod_primary == 0 {
+    set_parameter("primary_is_zero", true)
+}
+if eod_arrears_principle == 0 {
+    set_parameter("arrears_principle_is_zero", true)
+}
+if eod_primary == 0 && eod_arrears_principle == 0 && $arrears_interest_is_zero && $debit_interest_accrual_is_zero && $debit_interest_booked_is_zero && $penal_interest_accrual_is_zero {
+    set_parameter("close_date", $effective_time)
+    deactivate()
+}

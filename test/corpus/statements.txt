@@ -1,0 +1,210 @@
+================================================================================
+Variable declaration
+================================================================================
+
+fin := import("fin")
+times := import("times")
+amount := 100
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    name: (identifier)
+    value: (import_expression
+      source: (string_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (import_expression
+      source: (string_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (number_literal)))
+
+================================================================================
+Assignment statement
+================================================================================
+
+rate = fin.get_dated_rate($fixed_base_interest_rate, $effective_time, $max_interest_rate)
+amount += 50
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    operator: (assignment_operator)
+    right: (function_call
+      function: (selector_expression
+        object: (identifier)
+        property: (identifier))
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable)))))
+  (assignment_statement
+    left: (identifier)
+    operator: (assignment_operator)
+    right: (number_literal)))
+
+================================================================================
+If statement
+================================================================================
+
+if $loan_amount <= 0 {
+    reject("Loan amount must be positive")
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_statement
+    condition: (binary_expression
+      left: (parameter_variable)
+      operator: (comparative_operator)
+      right: (number_literal))
+    consequence: (block
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list
+            (argument (string_literal))))))))
+
+================================================================================
+If-else statement
+================================================================================
+
+if amount > 0 {
+    new_transaction("credit", "Credit transaction")
+} else {
+    new_transaction("debit", "Debit transaction")
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_statement
+    condition: (binary_expression
+      left: (identifier)
+      operator: (comparative_operator)
+      right: (number_literal))
+    consequence: (block
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list
+            (argument (string_literal))
+            (argument (string_literal))))))
+    alternative: (block
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list
+            (argument (string_literal))
+            (argument (string_literal))))))))
+
+================================================================================
+For loop
+================================================================================
+
+for i := 0; i < 10; i++ {
+    set_parameter("count", i)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (for_statement
+    initialization: (variable_declaration
+      name: (identifier)
+      value: (number_literal))
+    condition: (binary_expression
+      left: (identifier)
+      operator: (comparative_operator)
+      right: (number_literal))
+    update: (increment_statement
+      expression: (identifier))
+    body: (block
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list
+            (argument (string_literal))
+            (argument (identifier))))))))
+
+================================================================================
+For-in loop
+================================================================================
+
+for key, value in some_map {
+    set_parameter(key, value)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (for_in_statement
+    key: (identifier)
+    value: (identifier)
+    iterable: (identifier)
+    body: (block
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list
+            (argument (identifier))
+            (argument (identifier))))))))
+
+================================================================================
+Return statement
+================================================================================
+
+return amount * rate
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (return_statement
+    (binary_expression
+      left: (identifier)
+      operator: (multiplicative_operator)
+      right: (identifier))))
+
+================================================================================
+Break and continue statements
+================================================================================
+
+for {
+    if condition {
+        break
+    }
+    if other_condition {
+        continue
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (for_statement
+    body: (block
+      (if_statement
+        condition: (identifier)
+        consequence: (block
+          (break_statement)))
+      (if_statement
+        condition: (identifier)
+        consequence: (block
+          (continue_statement))))))
+
+================================================================================
+Export statement
+================================================================================
+
+export my_function
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (export_statement
+    value: (identifier)))

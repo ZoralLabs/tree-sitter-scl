@@ -1,0 +1,27 @@
+times := import("times")
+
+installment_demand_time := times.next_scheduled_time($effective_time, $term_type, $installment_demand_date, $installment_demand_day)
+booking_time := times.next_scheduled_time($effective_time, $interest_book_frequency, $interest_book_date, $interest_book_day)
+booking_time = min(booking_time, installment_demand_time)
+schedule_event("booking", booking_time)
+
+amount := $debit_interest_accrual_balance.amount
+if amount > 0 {
+    reject("on booking: Unexpected positive amount on debit interest accrual balance: " + amount + ", " + $effective_time)
+}
+amount = amount.abs
+
+if amount > 0 {
+    new_transaction($interest_transaction_type, "Interest booking of " + $effective_time.date_str)
+    new_posting($interest_receivable_balance_id, $interest_earned_balance_id, amount, $ledger, $interest_posting_type)
+    new_posting($debit_interest_booked_balance_id, $debit_interest_accrual_balance.id, amount, $ledger, $interest_posting_type)
+}
+
+// closure checks
+if amount == 0 {
+    set_parameter("debit_interest_accrual_is_zero", true)
+}
+if $primary_is_zero && $arrears_principle_is_zero && $arrears_interest_is_zero && amount == 0 && $debit_interest_booked_is_zero && $penal_interest_accrual_is_zero {
+    set_parameter("close_date", $effective_time)
+    deactivate()
+}

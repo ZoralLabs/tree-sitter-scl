@@ -1,0 +1,352 @@
+================================================================================
+Smart contract built-in functions
+================================================================================
+
+reject("Invalid loan amount: " + $loan_amount)
+set_parameter("loan_interest_rate", rate)
+schedule_event("booking", booking_time)
+deactivate()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument
+          (binary_expression
+            left: (string_literal)
+            operator: (additive_operator)
+            right: (parameter_variable))))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal))
+        (argument (identifier)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal))
+        (argument (identifier)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list))))
+
+================================================================================
+Transaction and posting operations
+================================================================================
+
+new_transaction($disbursement_transaction_type, "Loan disbursement")
+new_posting($primary_balance_id, $loan_disbursement_balance_id, $loan_amount, $ledger, $disbursement_posting_type)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (string_literal)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))))))
+
+================================================================================
+Math utility functions
+================================================================================
+
+min_value := min(booking_time, installment_demand_time)
+max_rate := max($base_rate, $minimum_rate)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    name: (identifier)
+    value: (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (identifier))
+        (argument (identifier)))))
+  (variable_declaration
+    name: (identifier)
+    value: (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))))))
+
+================================================================================
+Complex SCL smart contract example
+================================================================================
+
+if $loan_amount <= 0 {
+    reject("on activation: Loan amount is negative or zero: " + $loan_amount + ", " + $effective_time)
+}
+
+rate := fin.get_dated_rate($fixed_base_interest_rate, $effective_time, $max_interest_rate)
+set_parameter("loan_interest_rate", rate)
+
+base_rate := (rate / 100) / 12
+emi_amount := fin.payment(base_rate, $loan_period, $loan_amount, 0, "pay_end")
+emi_amount = fin.round_bank(emi_amount.abs, 2)
+set_parameter("emi_amount", emi_amount)
+
+installment_demand_time := times.next_scheduled_time($effective_time, $term_type, $installment_demand_date, $installment_demand_day)
+booking_time := times.next_scheduled_time($effective_time, $interest_book_frequency, $interest_book_date, $interest_book_day)
+booking_time = min(booking_time, installment_demand_time)
+
+schedule_event("booking", booking_time)
+schedule_event("demand_generation", installment_demand_time)
+
+new_transaction($disbursement_transaction_type, "Loan disbursement")
+new_posting($primary_balance_id, $loan_disbursement_balance_id, $loan_amount, $ledger, $disbursement_posting_type)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_statement
+    condition: (binary_expression
+      left: (parameter_variable)
+      operator: (comparative_operator)
+      right: (number_literal))
+    consequence: (block
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list
+            (argument
+              (binary_expression
+                left: (binary_expression
+                  left: (binary_expression
+                    left: (string_literal)
+                    operator: (additive_operator)
+                    right: (parameter_variable))
+                  operator: (additive_operator)
+                  right: (string_literal))
+                operator: (additive_operator)
+                right: (parameter_variable))))))))
+  (variable_declaration
+    name: (identifier)
+    value: (function_call
+      function: (selector_expression
+        object: (identifier)
+        property: (identifier))
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal))
+        (argument (identifier)))))
+  (variable_declaration
+    name: (identifier)
+    value: (binary_expression
+      left: (parenthesized_expression
+        (binary_expression
+          left: (identifier)
+          operator: (multiplicative_operator)
+          right: (number_literal)))
+      operator: (multiplicative_operator)
+      right: (number_literal)))
+  (variable_declaration
+    name: (identifier)
+    value: (function_call
+      function: (selector_expression
+        object: (identifier)
+        property: (identifier))
+      arguments: (argument_list
+        (argument (identifier))
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (number_literal))
+        (argument (string_literal)))))
+  (assignment_statement
+    left: (identifier)
+    operator: (assignment_operator)
+    right: (function_call
+      function: (selector_expression
+        object: (identifier)
+        property: (identifier))
+      arguments: (argument_list
+        (argument (selector_expression
+          object: (identifier)
+          property: (identifier)))
+        (argument (number_literal)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal))
+        (argument (identifier)))))
+  (variable_declaration
+    name: (identifier)
+    value: (function_call
+      function: (selector_expression
+        object: (identifier)
+        property: (identifier))
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable)))))
+  (variable_declaration
+    name: (identifier)
+    value: (function_call
+      function: (selector_expression
+        object: (identifier)
+        property: (identifier))
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable)))))
+  (assignment_statement
+    left: (identifier)
+    operator: (assignment_operator)
+    right: (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (identifier))
+        (argument (identifier)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal))
+        (argument (identifier)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal))
+        (argument (identifier)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (string_literal)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))
+        (argument (parameter_variable))))))
+
+================================================================================
+Balance access patterns
+================================================================================
+
+amount := $debit_interest_accrual_balance.amount
+balance_id := $primary_balance.id
+is_zero := $primary_is_zero
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    name: (identifier)
+    value: (selector_expression
+      object: (parameter_variable)
+      property: (identifier)))
+  (variable_declaration
+    name: (identifier)
+    value: (selector_expression
+      object: (parameter_variable)
+      property: (identifier)))
+  (variable_declaration
+    name: (identifier)
+    value: (parameter_variable)))
+
+================================================================================
+String concatenation with parameters
+================================================================================
+
+message := "Interest booking of " + $effective_time.date_str
+error_msg := "on booking: Unexpected positive amount on debit interest accrual balance: " + amount + ", " + $effective_time
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    name: (identifier)
+    value: (binary_expression
+      left: (string_literal)
+      operator: (additive_operator)
+      right: (selector_expression
+        object: (parameter_variable)
+        property: (identifier))))
+  (variable_declaration
+    name: (identifier)
+    value: (binary_expression
+      left: (binary_expression
+        left: (binary_expression
+          left: (string_literal)
+          operator: (additive_operator)
+          right: (identifier))
+        operator: (additive_operator)
+        right: (string_literal))
+      operator: (additive_operator)
+      right: (parameter_variable))))
+
+================================================================================
+Closure conditions and checks
+================================================================================
+
+if $primary_is_zero && $arrears_principle_is_zero && $arrears_interest_is_zero && amount == 0 && $debit_interest_booked_is_zero && $penal_interest_accrual_is_zero {
+    set_parameter("close_date", $effective_time)
+    deactivate()
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_statement
+    condition: (binary_expression
+      left: (binary_expression
+        left: (binary_expression
+          left: (binary_expression
+            left: (binary_expression
+              left: (parameter_variable)
+              operator: (and_operator)
+              right: (parameter_variable))
+            operator: (and_operator)
+            right: (parameter_variable))
+          operator: (and_operator)
+          right: (binary_expression
+            left: (identifier)
+            operator: (comparative_operator)
+            right: (number_literal)))
+        operator: (and_operator)
+        right: (parameter_variable))
+      operator: (and_operator)
+      right: (parameter_variable))
+    consequence: (block
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list
+            (argument (string_literal))
+            (argument (parameter_variable)))))
+      (expression_statement
+        (function_call
+          function: (identifier)
+          arguments: (argument_list))))))

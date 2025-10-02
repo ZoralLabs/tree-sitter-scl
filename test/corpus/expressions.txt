@@ -1,0 +1,379 @@
+================================================================================
+Parameter variables
+================================================================================
+
+$loan_amount
+$effective_time
+$primary_balance.amount
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement (parameter_variable))
+  (expression_statement (parameter_variable))
+  (expression_statement
+    (selector_expression
+      object: (parameter_variable)
+      property: (identifier))))
+
+================================================================================
+Binary expressions
+================================================================================
+
+amount + rate
+total - discount
+value * multiplier
+result / divisor
+remainder % modulo
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (additive_operator)
+      right: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (additive_operator)
+      right: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (multiplicative_operator)
+      right: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (multiplicative_operator)
+      right: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (multiplicative_operator)
+      right: (identifier))))
+
+================================================================================
+Comparison expressions
+================================================================================
+
+amount > 0
+rate <= max_rate
+balance == expected
+status != "active"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (comparative_operator)
+      right: (number_literal)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (comparative_operator)
+      right: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (comparative_operator)
+      right: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (comparative_operator)
+      right: (string_literal))))
+
+================================================================================
+Logical expressions
+================================================================================
+
+condition1 && condition2
+result1 || result2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (and_operator)
+      right: (identifier)))
+  (expression_statement
+    (binary_expression
+      left: (identifier)
+      operator: (or_operator)
+      right: (identifier))))
+
+================================================================================
+Unary expressions
+================================================================================
+
+-amount
++value
+!condition
+^bitmask
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (unary_expression
+      operator: "-"
+      operand: (identifier)))
+  (expression_statement
+    (unary_expression
+      operator: "+"
+      operand: (identifier)))
+  (expression_statement
+    (unary_expression
+      operator: "!"
+      operand: (identifier)))
+  (expression_statement
+    (unary_expression
+      operator: "^"
+      operand: (identifier))))
+
+================================================================================
+Function calls
+================================================================================
+
+reject("Invalid amount")
+set_parameter("rate", 5.5)
+min(value1, value2)
+fin.get_rate($base_rate, $time)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (string_literal))
+        (argument (number_literal)))))
+  (expression_statement
+    (function_call
+      function: (identifier)
+      arguments: (argument_list
+        (argument (identifier))
+        (argument (identifier)))))
+  (expression_statement
+    (function_call
+      function: (selector_expression
+        object: (identifier)
+        property: (identifier))
+      arguments: (argument_list
+        (argument (parameter_variable))
+        (argument (parameter_variable))))))
+
+================================================================================
+Array literals
+================================================================================
+
+[]
+[1, 2, 3]
+[amount, rate, total,]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (array_literal))
+  (expression_statement
+    (array_literal
+      (number_literal)
+      (number_literal)
+      (number_literal)))
+  (expression_statement
+    (array_literal
+      (identifier)
+      (identifier)
+      (identifier))))
+
+================================================================================
+Map literals
+================================================================================
+
+{}
+{"key": "value"}
+{"rate": 5.5, "amount": 1000}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (map_literal))
+  (expression_statement
+    (map_literal
+      (map_pair
+        key: (string_literal)
+        value: (string_literal))))
+  (expression_statement
+    (map_literal
+      (map_pair
+        key: (string_literal)
+        value: (number_literal))
+      (map_pair
+        key: (string_literal)
+        value: (number_literal)))))
+
+================================================================================
+Index and slice expressions
+================================================================================
+
+array[0]
+map["key"]
+slice[1:5]
+slice[start:]
+slice[:end]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (index_expression
+      object: (identifier)
+      index: (number_literal)))
+  (expression_statement
+    (index_expression
+      object: (identifier)
+      index: (string_literal)))
+  (expression_statement
+    (slice_expression
+      object: (identifier)
+      start: (number_literal)
+      end: (number_literal)))
+  (expression_statement
+    (slice_expression
+      object: (identifier)
+      start: (identifier)))
+  (expression_statement
+    (slice_expression
+      object: (identifier)
+      end: (identifier))))
+
+================================================================================
+Ternary expressions
+================================================================================
+
+condition ? true_value : false_value
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (ternary_expression
+      condition: (identifier)
+      consequence: (identifier)
+      alternative: (identifier))))
+
+================================================================================
+Function literals
+================================================================================
+
+func(x, y) { return x + y }
+func(name, ...args) { return name }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (function_literal
+      parameters: (parameter_list
+        (parameter (identifier))
+        (parameter (identifier)))
+      body: (block
+        (return_statement
+          (binary_expression
+            left: (identifier)
+            operator: (additive_operator)
+            right: (identifier))))))
+  (expression_statement
+    (function_literal
+      parameters: (parameter_list
+        (parameter (identifier))
+        (variadic_parameter (identifier)))
+      body: (block
+        (return_statement (identifier))))))
+
+================================================================================
+Import expressions
+================================================================================
+
+import("fin")
+import("times")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (import_expression
+      source: (string_literal)))
+  (expression_statement
+    (import_expression
+      source: (string_literal))))
+
+================================================================================
+String literals and escapes
+================================================================================
+
+"simple string"
+"string with \"quotes\""
+"string with \n newline"
+`raw string with "quotes"`
+'c'
+'\n'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement (string_literal))
+  (expression_statement (string_literal))
+  (expression_statement (string_literal))
+  (expression_statement (raw_string_literal))
+  (expression_statement (char_literal))
+  (expression_statement (char_literal)))
+
+================================================================================
+Boolean and undefined literals
+================================================================================
+
+true
+false
+undefined
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement (boolean_literal (true)))
+  (expression_statement (boolean_literal (false)))
+  (expression_statement (undefined)))
+
+================================================================================
+Parenthesized expressions
+================================================================================
+
+(amount + rate) * multiplier
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      left: (parenthesized_expression
+        (binary_expression
+          left: (identifier)
+          operator: (additive_operator)
+          right: (identifier)))
+      operator: (multiplicative_operator)
+      right: (identifier))))

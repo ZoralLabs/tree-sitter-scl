@@ -1,0 +1,80 @@
+times := import("times")
+
+arrears_principle_amount := $arrears_principle_balance.amount
+if arrears_principle_amount > 0 {
+    reject("on demand satisfaction: Unexpected positive amount on arrears principle balance: " + arrears_principle_amount + ", " + $effective_time)
+}
+arrears_principle_amount = arrears_principle_amount.abs
+
+arrears_interest_amount := $arrears_interest_balance.amount
+if arrears_interest_amount > 0 {
+    reject("on demand satisfaction: Unexpected positive amount on arrears interest balance: " + arrears_interest_amount + ", " + $effective_time)
+}
+arrears_interest_amount = arrears_interest_amount.abs
+
+penal_interest_amount := $penal_interest_accrual_balance.amount
+if penal_interest_amount > 0 {
+    reject("on demand satisfaction: Unexpected positive amount on penalty interest accrual balance: " + penal_interest_amount + ", " + $effective_time)
+}
+penal_interest_amount = penal_interest_amount.abs
+
+arrears_amount := arrears_principle_amount + arrears_interest_amount + penal_interest_amount
+repayment_balance_amount := $repayment_balance.amount
+
+next_time := undefined
+if repayment_balance_amount >= arrears_amount || arrears_amount == 0 {
+    next_time = times.next_scheduled_time($effective_time, $term_type, $installment_demand_date, $installment_demand_day)
+    if arrears_amount > 0 {
+        new_transaction($demand_satisfaction_transaction_type, "Demand satisfaction")
+        new_posting($repayment_balance.id, $primary_balance_id, arrears_amount, $ledger, $system_recovery_posting_type)
+        if arrears_interest_amount > 0 {
+            new_posting($primary_balance_id, $interest_receivable_balance_id, arrears_interest_amount, $ledger, $system_recovery_posting_type)
+            new_posting($internal_contra_balance_id, $arrears_interest_balance.id, arrears_interest_amount, $ledger, $system_recovery_posting_type)
+        }
+        if arrears_principle_amount > 0 {
+            new_posting($primary_balance_id, $arrears_principle_balance.id, arrears_principle_amount, $ledger, $system_recovery_posting_type)
+        }
+        if penal_interest_amount > 0 {
+            new_posting($primary_balance_id, $penalty_interest_earned_balance_id, penal_interest_amount, $ledger, $system_recovery_posting_type)
+            new_posting($internal_contra_balance_id, $penal_interest_accrual_balance.id, penal_interest_amount, $ledger, $system_recovery_posting_type)
+        }
+    }
+} else {
+    next_time = times.add_date($effective_time, 0, 0, 1)
+    if repayment_balance_amount > 0 {
+        new_transaction($demand_satisfaction_transaction_type, "Demand satisfaction")
+        new_posting($repayment_balance.id, $primary_balance_id, repayment_balance_amount, $ledger, $system_recovery_posting_type)
+        amount := arrears_interest_amount * repayment_balance_amount / arrears_amount
+        if amount > 0 {
+            new_posting($primary_balance_id, $interest_receivable_balance_id, amount, $ledger, $system_recovery_posting_type)
+            new_posting($internal_contra_balance_id, $arrears_interest_balance.id, amount, $ledger, $system_recovery_posting_type)
+        }
+        amount = arrears_principle_amount * repayment_balance_amount / arrears_amount
+        if amount > 0 {
+            new_posting($primary_balance_id, $arrears_principle_balance.id, amount, $ledger, $system_recovery_posting_type)
+        }
+        amount = penal_interest_amount * repayment_balance_amount / arrears_amount
+        if amount > 0 {
+            new_posting($primary_balance_id, $penalty_interest_earned_balance_id, amount, $ledger, $system_recovery_posting_type)
+            new_posting($internal_contra_balance_id, $penal_interest_accrual_balance.id, amount, $ledger, $system_recovery_posting_type)
+        }
+    }
+}
+
+// closure checks
+if arrears_principle_amount == 0 {
+    set_parameter("arrears_principle_is_zero", true)
+}
+if arrears_interest_amount == 0 {
+    set_parameter("arrears_interest_is_zero", true)
+}
+if penal_interest_amount == 0 {
+    set_parameter("penal_interest_accrual_is_zero", true)
+}
+if $primary_is_zero && arrears_principle_amount == 0 && arrears_interest_amount == 0 && $debit_interest_accrual_is_zero && $debit_interest_booked_is_zero && penal_interest_amount == 0 {
+    set_parameter("close_date", $effective_time)
+    deactivate()
+}
+
+// schedule next event
+schedule_event("demand_satisfaction", next_time)
