@@ -1,0 +1,17 @@
+{
+  "grammars": [
+    {
+      "name": "scl",
+      "scope": "source.scl",
+      "file-types": ["scl"],
+      "injection-regex": "^scl$"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "license": "Apache-2.0",
+    "description": "Tree-sitter grammar for SCL (Smart Contracts Language)",
+    "author": "Yurii Biurher",
+    "repository": "https://github.com/ZoralLabs/tree-sitter-scl.git"
+  }
+}

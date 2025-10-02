@@ -1,29 +1,26 @@
 {
   "name": "tree-sitter-scl",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tree-sitter grammar for SCL (Smart Contracts Language)",
   "main": "bindings/node",
   "types": "bindings/node",
   "keywords": [
-    "parser",
     "tree-sitter",
     "scl",
-    "smart-contracts",
-    "tengo",
-    "parsing"
+    "smart-contracts"
   ],
-  "author": "Your Name",
-  "license": "MIT",
+  "author": "Yurii Biurher",
+  "license": "Apache-2.0",
   "dependencies": {
-    "node-addon-api": "^7.1.0",
-    "node-gyp-build": "^4.8.0"
+    "node-addon-api": "^8.5.0",
+    "node-gyp-build": "^4.8.4"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.22.2",
-    "prebuildify": "^6.0.0"
+    "tree-sitter-cli": "^0.25.10",
+    "prebuildify": "^6.0.1"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.21.0"
+    "tree-sitter": "^0.25.0"
   },
   "peerDependenciesMeta": {
     "tree-sitter": {
@@ -31,14 +28,14 @@
     }
   },
   "scripts": {
-    "build": "tree-sitter build",
-    "build-wasm": "tree-sitter build --wasm",
+    "build": "tree-sitter build --wasm",
     "generate": "tree-sitter generate",
     "test": "tree-sitter test",
     "test-watch": "tree-sitter test --debug",
     "parse": "tree-sitter parse",
     "install": "node-gyp-build",
-    "prebuildify": "prebuildify --napi --strip"
+    "prebuildify": "prebuildify --napi --strip",
+    "playground": "tree-sitter playground"
   },
   "tree-sitter": [
     {
@@ -51,12 +48,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/tree-sitter-scl.git"
+    "url": "https://github.com/ZoralLabs/tree-sitter-scl.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/tree-sitter-scl/issues"
+    "url": "https://github.com/ZoralLabs/tree-sitter-scl/issues"
   },
-  "homepage": "https://github.com/yourusername/tree-sitter-scl#readme",
+  "homepage": "https://github.com/ZoralLabs/tree-sitter-scl#readme",
   "files": [
     "grammar.js",
     "src",
