@@ -1,90 +1,40 @@
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build outputs
-build/
-prebuilds/
 *.wasm
+*.lock
 *.dylib
+*.dll
+*.pc
+*.exp
+*.lib
 *.so
 *.so.*
 *.a
 *.o
 *.obj
-
-# Rust
-target/
-Cargo.lock
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Generated files that should be ignored
-src/grammar.json
-src/node-types.json
-
-# Keep parser.c and tree_sitter headers - these need to be committed!
-# src/parser.c
-# src/tree_sitter/
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pids/
-*.pid
-*.seed
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Test artifacts
-test/corpus/*.actual
-
-# Temporary files
 *.tmp
-*.temp
 *.tar.gz
 *.tgz
 *.zip
+*.egg-info
+*.whl
+
+.DS_Store
+.zed
+.envrc
+
+package-lock.json
+Package.resolved
+
+grammars/
+target/
+node_modules/
+build/
+prebuilds/
+target/
+dist/
+zig-cache/
+zig-out/
+_obj/
+
+.build/
+.venv/
+.zig-cache/
