@@ -6,6 +6,32 @@ A [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar for SCL (Sma
 
 SCL is a smart contracts language that provides built-in functions and constructs for financial and contract operations. This tree-sitter grammar enables syntax highlighting, code folding, and other editor features for SCL files in various editors including Zed, Neovim, Helix, and others.
 
+## Project Status
+
+✅ **Complete and Ready to Use**
+
+- ✅ Full SCL grammar implementation
+- ✅ Parameter variables (`$variable`) support
+- ✅ Smart contract built-in functions
+- ✅ Syntax highlighting queries
+- ✅ Node.js bindings
+- ✅ Example files and test cases
+- ✅ Compatible with Zed editor extension
+
+The parser successfully handles all SCL language constructs and has been tested with real smart contract files.
+
+## Quick Start
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd tree-sitter-scl
+npm install
+
+# Test the parser
+npx tree-sitter parse examples/simple.scl
+```
+
 ## Features
 
 - **Complete SCL syntax support**: Variables, functions, control structures, operators
