@@ -113,30 +113,41 @@ result1 || result2
 Unary expressions
 ================================================================================
 
--amount
-+value
-!condition
-^bitmask
+{
+    -amount
+}
+
+{
+    +value
+}
+
+{
+    !condition
+}
+
+{
+    ^bitmask
+}
 
 --------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement
-    (unary_expression
-      operator: "-"
-      operand: (identifier)))
-  (expression_statement
-    (unary_expression
-      operator: "+"
-      operand: (identifier)))
-  (expression_statement
-    (unary_expression
-      operator: "!"
-      operand: (identifier)))
-  (expression_statement
-    (unary_expression
-      operator: "^"
-      operand: (identifier))))
+  (block
+    (expression_statement
+      (unary_expression
+        operand: (identifier))))
+  (block
+    (expression_statement
+      (unary_expression
+        operand: (identifier))))
+  (block
+    (expression_statement
+      (unary_expression
+        operand: (identifier))))
+  (block
+    (expression_statement
+      (unary_expression
+        operand: (identifier)))))
 
 ================================================================================
 Function calls
@@ -180,25 +191,36 @@ fin.get_rate($base_rate, $time)
 Array literals
 ================================================================================
 
-[]
-[1, 2, 3]
-[amount, rate, total,]
+{
+    []
+}
+
+{
+    [1, 2, 3]
+}
+
+{
+    [amount, rate, total,]
+}
 
 --------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement
-    (array_literal))
-  (expression_statement
-    (array_literal
-      (number_literal)
-      (number_literal)
-      (number_literal)))
-  (expression_statement
-    (array_literal
-      (identifier)
-      (identifier)
-      (identifier))))
+  (block
+    (expression_statement
+      (array_literal)))
+  (block
+    (expression_statement
+      (array_literal
+        (number_literal)
+        (number_literal)
+        (number_literal))))
+  (block
+    (expression_statement
+      (array_literal
+        (identifier)
+        (identifier)
+        (identifier)))))
 
 ================================================================================
 Map literals
@@ -289,22 +311,27 @@ func(name, ...args) { return name }
 (source_file
   (expression_statement
     (function_literal
+      (func)
       parameters: (parameter_list
         (parameter (identifier))
         (parameter (identifier)))
       body: (block
         (return_statement
+          (return)
           (binary_expression
             left: (identifier)
             operator: (additive_operator)
             right: (identifier))))))
   (expression_statement
     (function_literal
+      (func)
       parameters: (parameter_list
         (parameter (identifier))
         (variadic_parameter (identifier)))
       body: (block
-        (return_statement (identifier))))))
+        (return_statement
+          (return)
+          (identifier))))))
 
 ================================================================================
 Import expressions
@@ -318,9 +345,11 @@ import("times")
 (source_file
   (expression_statement
     (import_expression
+      (import)
       source: (string_literal)))
   (expression_statement
     (import_expression
+      (import)
       source: (string_literal))))
 
 ================================================================================

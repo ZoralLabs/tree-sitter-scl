@@ -117,6 +117,7 @@ new_posting($primary_balance_id, $loan_disbursement_balance_id, $loan_amount, $l
 
 (source_file
   (if_statement
+    (if)
     condition: (binary_expression
       left: (parameter_variable)
       operator: (comparative_operator)
@@ -320,6 +321,7 @@ if $primary_is_zero && $arrears_principle_is_zero && $arrears_interest_is_zero &
 
 (source_file
   (if_statement
+    (if)
     condition: (binary_expression
       left: (binary_expression
         left: (binary_expression

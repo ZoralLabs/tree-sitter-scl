@@ -36,3 +36,10 @@ foo := func(x) {
 
 x := foo(5)
 y := config.rate
+
+x = +a
+y = -b
+
+export {
+    get_days_in_year: get_days_in_year
+}

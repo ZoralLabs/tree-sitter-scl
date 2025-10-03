@@ -12,10 +12,12 @@ amount := 100
   (variable_declaration
     name: (identifier)
     value: (import_expression
+      (import)
       source: (string_literal)))
   (variable_declaration
     name: (identifier)
     value: (import_expression
+      (import)
       source: (string_literal)))
   (variable_declaration
     name: (identifier)
@@ -59,6 +61,7 @@ if $loan_amount <= 0 {
 
 (source_file
   (if_statement
+    (if)
     condition: (binary_expression
       left: (parameter_variable)
       operator: (comparative_operator)
@@ -84,6 +87,7 @@ if amount > 0 {
 
 (source_file
   (if_statement
+    (if)
     condition: (binary_expression
       left: (identifier)
       operator: (comparative_operator)
@@ -95,6 +99,7 @@ if amount > 0 {
           arguments: (argument_list
             (argument (string_literal))
             (argument (string_literal))))))
+    (else)
     alternative: (block
       (expression_statement
         (function_call
@@ -115,6 +120,7 @@ for i := 0; i < 10; i++ {
 
 (source_file
   (for_statement
+    (for)
     initialization: (variable_declaration
       name: (identifier)
       value: (number_literal))
@@ -144,8 +150,10 @@ for key, value in some_map {
 
 (source_file
   (for_in_statement
+    (for)
     key: (identifier)
     value: (identifier)
+    (in)
     iterable: (identifier)
     body: (block
       (expression_statement
@@ -165,6 +173,7 @@ return amount * rate
 
 (source_file
   (return_statement
+    (return)
     (binary_expression
       left: (identifier)
       operator: (multiplicative_operator)
@@ -187,15 +196,20 @@ for {
 
 (source_file
   (for_statement
+    (for)
     body: (block
       (if_statement
+        (if)
         condition: (identifier)
         consequence: (block
-          (break_statement)))
+          (break_statement
+            (break))))
       (if_statement
+        (if)
         condition: (identifier)
         consequence: (block
-          (continue_statement))))))
+          (continue_statement
+            (continue)))))))
 
 ================================================================================
 Export statement
@@ -207,4 +221,5 @@ export my_function
 
 (source_file
   (export_statement
+    (export)
     value: (identifier)))
