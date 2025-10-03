@@ -100,7 +100,7 @@
 
 ; Builtin contract functions
 (function_call function: (identifier) @function.special
-    (#match? @function.builtin.contract "^(log|reject|deactivate|new_transaction|new_posting|new_notification|new_snapshot|enable_events|disable_events|set_parameter|schedule_event|to_event_time)$"))
+    (#match? @function.special "^(log|reject|deactivate|new_transaction|new_posting|new_notification|new_snapshot|enable_events|disable_events|set_parameter|schedule_event|to_event_time)$"))
 
 ; Builtin type functions
 (function_call function: (identifier) @type
@@ -123,5 +123,5 @@
 (map_pair key: (identifier) @property)
 (map_pair key: (string_literal) @property.string)
 (map_pair key: (number_literal) @property.number)
-(map_pair key: (boolean_literal) @property.boolean)
-(map_pair key: (undefined) @property.keyword)
+(map_pair key: (boolean_literal) @property)
+(map_pair key: (undefined) @property)
