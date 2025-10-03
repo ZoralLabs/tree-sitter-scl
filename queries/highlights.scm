@@ -59,8 +59,11 @@
 ; Parameter variables
 (parameter_variable) @variable.parameter
 
-;(boolean_literal) @constant.builtin.boolean
-;(undefined) @constant.builtin
+; Booleans
+(boolean_literal) @constant.builtin.boolean
+
+; Undefined
+(undefined) @constant.builtin
 
 ; Numbers
 (number_literal) @number
@@ -78,6 +81,7 @@
 (break_statement (break) @keyword.control.jump)
 (continue_statement (continue) @keyword.control.jump)
 (export_statement (export) @keyword.declaration)
+(function_literal (func) @keyword.declaration)
 
 ; Generic function call
 (function_call function: (identifier) @function)
@@ -106,3 +110,10 @@
 
 ; Strings
 (string_literal) @string
+
+; Map keys
+(map_pair key: (identifier) @property)
+(map_pair key: (string_literal) @property.string)
+(map_pair key: (number_literal) @property.number)
+(map_pair key: (boolean_literal) @property.boolean)
+(map_pair key: (undefined) @property.keyword)

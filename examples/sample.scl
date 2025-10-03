@@ -17,7 +17,8 @@ balances := ["primary", "secondary", "interest"]
 config := {
     "rate": rate,
     amount: $loan_amount,
-    true: true
+    true: true,
+    10: 20,
 }
 
 rate = 10
