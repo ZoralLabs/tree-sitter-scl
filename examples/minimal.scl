@@ -1,8 +1,0 @@
-// Minimal SCL example
-amount := $loan_amount
-
-if amount > 0 {
-    set_parameter("status", "active")
-}
-
-reject("Test message")
