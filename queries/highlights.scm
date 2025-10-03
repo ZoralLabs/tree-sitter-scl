@@ -70,6 +70,9 @@
 
 ; Import
 (import_expression (import) @function.builtin.import)
+(variable_declaration
+    name: (identifier) @module
+    value: (import_expression (import) @function.builtin.import))
 
 ; Keywords
 (if_statement (if) @keyword.control.conditional)
@@ -82,6 +85,11 @@
 (continue_statement (continue) @keyword.control.jump)
 (export_statement (export) @keyword.declaration)
 (function_literal (func) @keyword.declaration)
+
+; Function definitions
+(variable_declaration
+    name: (identifier) @function.definition
+    value: (function_literal (func) @keyword.declaration))
 
 ; Generic function call
 (function_call function: (identifier) @function)
