@@ -57,19 +57,8 @@ module.exports = grammar({
         return: () => "return",
         export: () => "export",
         import: () => "import",
-        var: () => "var",
         break: () => "break",
         continue: () => "continue",
-
-        // Built-in SCL functions for smart contracts
-        reject: () => "reject",
-        set_parameter: () => "set_parameter",
-        schedule_event: () => "schedule_event",
-        new_transaction: () => "new_transaction",
-        new_posting: () => "new_posting",
-        deactivate: () => "deactivate",
-        min: () => "min",
-        max: () => "max",
 
         // Statements
         _statement: ($) =>

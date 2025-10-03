@@ -104,10 +104,6 @@
       "type": "STRING",
       "value": "import"
     },
-    "var": {
-      "type": "STRING",
-      "value": "var"
-    },
     "break": {
       "type": "STRING",
       "value": "break"
@@ -115,38 +111,6 @@
     "continue": {
       "type": "STRING",
       "value": "continue"
-    },
-    "reject": {
-      "type": "STRING",
-      "value": "reject"
-    },
-    "set_parameter": {
-      "type": "STRING",
-      "value": "set_parameter"
-    },
-    "schedule_event": {
-      "type": "STRING",
-      "value": "schedule_event"
-    },
-    "new_transaction": {
-      "type": "STRING",
-      "value": "new_transaction"
-    },
-    "new_posting": {
-      "type": "STRING",
-      "value": "new_posting"
-    },
-    "deactivate": {
-      "type": "STRING",
-      "value": "deactivate"
-    },
-    "min": {
-      "type": "STRING",
-      "value": "min"
-    },
-    "max": {
-      "type": "STRING",
-      "value": "max"
     },
     "_statement": {
       "type": "CHOICE",

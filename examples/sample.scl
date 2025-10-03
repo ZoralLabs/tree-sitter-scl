@@ -1,55 +1,37 @@
-// Simple SCL example for testing
+// this is comment
 fin := import("fin")
-times := import("times")
 
-// Check loan amount
-if $loan_amount <= 0 {
+if $loan_amount <= 0 && a >= 10 || b != 11 {
     reject("Invalid loan amount: " + $loan_amount)
+} else if $loan_amount > 10000 {
+    approve("Loan approved for amount: " + $loan_amount)
+} else {
+    review("Loan requires further review.")
 }
 
-// Calculate interest rate
 rate := fin.get_rate($base_rate, $effective_time)
+rate += decimal(1) / 100
 set_parameter("current_rate", rate)
 
-// Simple arithmetic
-total := $loan_amount * rate / 100
-monthly_payment := total / 12
-
-// Array and map examples
 balances := ["primary", "secondary", "interest"]
 config := {
     "rate": rate,
-    "amount": $loan_amount,
-    "active": true
+    amount: $loan_amount,
+    true: true
 }
 
-// Function definition
-calculate_fee := func(amount, percentage) {
-    return amount * percentage / 100
-}
-
-// Call the function
-fee := calculate_fee($loan_amount, 2.5)
-
-// Loop example
+rate = 10
 for i := 0; i < 5; i++ {
+    i--
     schedule_event("reminder_" + i, $effective_time)
 }
-
-// For-in example
 for key, value in config {
     set_parameter(key + "_backup", value)
 }
 
-// Conditional with built-ins
-if fee > 0 {
-    new_transaction("fee", "Processing fee")
-    new_posting($fee_balance, $income_balance, fee, $ledger, "fee_type")
+foo := func(x) {
+    return x * x
 }
 
-// Balance checks
-primary_amount := $primary_balance.amount
-if primary_amount == 0 {
-    set_parameter("balance_zero", true)
-    deactivate()
-}
+x := foo(5)
+y := config.rate
