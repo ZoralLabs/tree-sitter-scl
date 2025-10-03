@@ -57,10 +57,10 @@
 (identifier) @variable
 
 ; Parameter variables
-(parameter_variable) @variable.parameter
+(parameter_variable) @variable.special
 
 ; Booleans
-(boolean_literal) @constant.builtin.boolean
+(boolean_literal) @boolean
 
 ; Undefined
 (undefined) @constant.builtin
@@ -69,27 +69,27 @@
 (number_literal) @number
 
 ; Import
-(import_expression (import) @function.builtin.import)
+(import_expression (import) @function.builtin)
 (variable_declaration
     name: (identifier) @module
-    value: (import_expression (import) @function.builtin.import))
+    value: (import_expression (import) @function.builtin))
 
 ; Keywords
-(if_statement (if) @keyword.control.conditional)
-(if_statement (else) @keyword.control.conditional)
-(for_statement (for) @keyword.control.loop)
-(for_in_statement (for) @keyword.control.loop)
-(for_in_statement (in) @keyword.control.loop)
-(return_statement (return) @keyword.control.jump)
-(break_statement (break) @keyword.control.jump)
-(continue_statement (continue) @keyword.control.jump)
-(export_statement (export) @keyword.declaration)
-(function_literal (func) @keyword.declaration)
+(if_statement (if) @keyword)
+(if_statement (else) @keyword)
+(for_statement (for) @keyword)
+(for_in_statement (for) @keyword)
+(for_in_statement (in) @keyword)
+(return_statement (return) @keyword)
+(break_statement (break) @keyword)
+(continue_statement (continue) @keyword)
+(export_statement (export) @keyword.special)
+(function_literal (func) @keyword)
 
 ; Function definitions
 (variable_declaration
-    name: (identifier) @function.definition
-    value: (function_literal (func) @keyword.declaration))
+    name: (identifier) @function
+    value: (function_literal (func) @keyword.special))
 
 ; Generic function call
 (function_call function: (identifier) @function)
@@ -99,12 +99,12 @@
     (#match? @function.builtin "^(len|copy|append|delete|splice|format|range|assert|assert2|min|max|parse_bool|type_name|is_int|is_float|is_string|is_bool|is_char|is_bytes|is_array|is_immutable_array|is_map|is_immutable_map|is_iterable|is_time|is_error|is_undefined|is_function|is_callable|is_decimal|is_uid|is_balance_id|is_balance|is_posting|is_transaction|is_tiered_rate|is_dated_rate|is_nid|is_op_context)$"))
 
 ; Builtin contract functions
-(function_call function: (identifier) @function.builtin.contract
+(function_call function: (identifier) @function.special
     (#match? @function.builtin.contract "^(log|reject|deactivate|new_transaction|new_posting|new_notification|new_snapshot|enable_events|disable_events|set_parameter|schedule_event|to_event_time)$"))
 
 ; Builtin type functions
-(function_call function: (identifier) @type.builtin
-    (#match? @type.builtin "^(string|int|bool|float|char|bytes|time|decimal|uid|tiered_rate|dated_rate)$"))
+(function_call function: (identifier) @type
+    (#match? @type "^(string|int|bool|float|char|bytes|time|decimal|uid|tiered_rate|dated_rate)$"))
 
 ; Generic selector
 (selector_expression
